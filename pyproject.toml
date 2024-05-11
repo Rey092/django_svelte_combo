@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "django-svelte-combo"
+version = "0.0.1"
+description = "Django-Svelte development-ready template"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "django_svelte_combo"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiogram = "^3.6.0"
+django = "^5.0.6"
+django-configurations = "^2.5.1"
+psycopg2-binary = "^2.9.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
