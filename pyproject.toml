@@ -18,6 +18,7 @@ django-debug-toolbar = "^4.3.0"
 django-extensions = "^3.2.3"
 django-redis = "^5.4.0"
 requests-tracker = "^0.3.3"
+django-cleanup = "^8.1.0"
 
 
 [build-system]

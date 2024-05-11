@@ -35,9 +35,9 @@ class Base(Configuration):
     THIRD_PARTY_APPS = [
         "allauth",
         "allauth.account",
-        # "allauth.mfa",
         # "allauth.socialaccount",
         "django_extensions",
+        "django_cleanup.apps.CleanupConfig",
     ]
     LOCAL_APPS = [
         "src.core",
