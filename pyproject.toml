@@ -12,6 +12,12 @@ aiogram = "^3.6.0"
 django = "^5.0.6"
 django-configurations = "^2.5.1"
 psycopg2-binary = "^2.9.9"
+django-allauth = "^0.62.1"
+argon2-cffi = "^23.1.0"
+django-debug-toolbar = "^4.3.0"
+django-extensions = "^3.2.3"
+django-redis = "^5.4.0"
+requests-tracker = "^0.3.3"
 
 
 [build-system]
