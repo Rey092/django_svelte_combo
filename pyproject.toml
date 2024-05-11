@@ -19,6 +19,10 @@ django-extensions = "^3.2.3"
 django-redis = "^5.4.0"
 requests-tracker = "^0.3.3"
 django-cleanup = "^8.1.0"
+django-unfold = "^0.22.0"
+celery = "^5.4.0"
+django-celery-beat = "^2.6.0"
+django-celery-results = "^2.5.1"
 
 
 [build-system]
