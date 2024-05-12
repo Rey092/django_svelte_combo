@@ -42,7 +42,3 @@ To initialize the project, follow these steps:
 - `make check`: Check the project
 - `make run-dev`: Run the server in development mode
 - `make run-prod`: Run the server in production mode
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE.md file for details
