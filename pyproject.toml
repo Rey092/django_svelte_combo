@@ -23,6 +23,7 @@ django-unfold = "^0.22.0"
 celery = "^5.4.0"
 django-celery-beat = "^2.6.0"
 django-celery-results = "^2.5.1"
+gunicorn = "^22.0.0"
 
 
 [build-system]

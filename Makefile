@@ -47,8 +47,7 @@ check:
 	python manage.py check --deploy --configuration=Prod
 
 run-dev:
-	# TODO: Add dev
-	python manage.py runserver
+	gunicorn config.wsgi:application
 
 run-prod:
 	# TODO: Add prod
