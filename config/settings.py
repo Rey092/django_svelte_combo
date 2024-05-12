@@ -317,25 +317,23 @@ class Local(Base):
 
     # TODO: check all those debug toolbars
     # django-debug-toolbar: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
-    if False:
-        THIRD_PARTY_APPS = [*Base.THIRD_PARTY_APPS, "debug_toolbar"]
-        # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
-        MIDDLEWARE = [
-            *Base.MIDDLEWARE,
-            "debug_toolbar.middleware.DebugToolbarMiddleware",
-        ]
-        # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
-        DEBUG_TOOLBAR_CONFIG = {
-            "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
-            "SHOW_TEMPLATE_CONTEXT": True,
-        }
-
-        # requests-tracker: https://pypi.org/project/requests-tracker/#install-the-package
-        THIRD_PARTY_APPS = [*THIRD_PARTY_APPS, "requests_tracker"]
-        MIDDLEWARE = [
-            *MIDDLEWARE,
-            "requests_tracker.middleware.requests_tracker_middleware",
-        ]
+    THIRD_PARTY_APPS = [*Base.THIRD_PARTY_APPS, "debug_toolbar"]
+    # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
+    MIDDLEWARE = [
+        *Base.MIDDLEWARE,
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
+    # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
+    DEBUG_TOOLBAR_CONFIG = {
+        "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
+        "SHOW_TEMPLATE_CONTEXT": True,
+    }
+    # requests-tracker: https://pypi.org/project/requests-tracker/#install-the-package
+    THIRD_PARTY_APPS = [*THIRD_PARTY_APPS, "requests_tracker"]
+    MIDDLEWARE = [
+        *MIDDLEWARE,
+        "requests_tracker.middleware.requests_tracker_middleware",
+    ]
 
     # ips: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
     INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]

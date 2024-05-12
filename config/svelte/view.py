@@ -28,7 +28,6 @@ class InertiaView(View):
             "user": self.get_user_data(**kwargs),
         }
 
-    @staticmethod
     def get_user_data(self, **kwargs):
         """Get user data."""
         # TODO: return lambda: self.request.user
