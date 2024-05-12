@@ -3,6 +3,10 @@
 run:
 	python manage.py runserver
 
+svelte:
+	cd frontend && npm install
+	cd frontend && npm run dev
+
 init:
 	python manage.py migrate
 	python manage.py init_project
