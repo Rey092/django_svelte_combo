@@ -17,6 +17,8 @@ This is a template project for future Django projects. It is designed to be a st
 - django_redis
 - django_cleanup
 - django_extensions
+- django_telegram_logging
+- django_inertia
 
 ## Getting Started
 
@@ -27,18 +29,3 @@ To initialize the project, follow these steps:
 3. Copy env sample file: `cp example.env .env`
 4. Initialize the project: `make init`
 5. Run the server: `make run`
-
-## Commands
-
-- `make run`: Run the server
-- `make init`: Initialize the project
-- `make fix`: Reset the database and initialize the project
-- `make migrations`: Make migrations
-- `make migrate`: Apply migrations
-- `make messages`: Make translation messages
-- `make compile`: Compile translation messages
-- `make worker`: Run Celery worker
-- `make beat`: Run Celery beat
-- `make check`: Check the project
-- `make run-dev`: Run the server in development mode
-- `make run-prod`: Run the server in production mode
