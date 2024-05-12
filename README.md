@@ -24,8 +24,9 @@ To initialize the project, follow these steps:
 
 1. Clone the repository: `git clone https://github.com/Rey092/django_svelte_combo .`
 2. Install the requirements: `poetry install`
-3. Initialize the project: `make init`
-4. Run the server: `make run`
+3. Copy env sample file: `cp example.env .env`
+4. Initialize the project: `make init`
+5. Run the server: `make run`
 
 ## Commands
 
