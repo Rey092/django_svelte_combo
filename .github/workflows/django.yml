@@ -25,7 +25,11 @@ jobs:
       uses: abatilo/actions-poetry@v2
       with:
         poetry-version: ${{ matrix.poetry-version }}
+      run: |
+        RUN poetry export -f requirements.txt --without-hashes --only main -o requirements.txt
+        RUN pip install -r requirements.txt
+        RUN rm requirements.txt
     - name: Run Checks
       run: |
-        poetry run python manage.py check
-        poetry run python manage.py check --deploy
+        python manage.py check
+        python manage.py check --deploy
