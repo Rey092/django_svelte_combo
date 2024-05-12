@@ -28,4 +28,4 @@ To initialize the project, follow these steps:
 2. Install the requirements: `poetry install`
 3. Copy env sample file: `cp example.env .env`
 4. Initialize the project: `make init`
-5. Run the server: `make run`
+5. Next time you want to start the project, just run `make start`
