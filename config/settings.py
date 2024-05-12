@@ -49,9 +49,7 @@ class Base(
         "django.contrib.staticfiles",
     ]
     THIRD_PARTY_APPS = [
-        "allauth",
-        "allauth.account",
-        # "allauth.socialaccount",
+        *AllauthConfig.ALLAUTH_APPS,
         "django_extensions",
         "django_cleanup.apps.CleanupConfig",
         "django_celery_beat",
@@ -77,7 +75,7 @@ class Base(
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
-        "allauth.account.middleware.AccountMiddleware",
+        *AllauthConfig.ALLAUTH_MIDDLEWARE,
     ]
 
     # Default primary key field type: https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -141,21 +139,13 @@ class Base(
 
     # Authentication: https://docs.djangoproject.com/en/5.0/ref/settings/#authentication-backends
     AUTHENTICATION_BACKENDS = [
-        # Needed to log in by username in Django admin, regardless of `allauth`
+        # Needed to log in by username in Django admin
         "django.contrib.auth.backends.ModelBackend",
-        # `allauth` specific authentication methods, such as login by email
-        "allauth.account.auth_backends.AuthenticationBackend",
+        *AllauthConfig.ALLAUTH_AUTHENTICATION_BACKENDS,
     ]
 
     # User Model https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
     AUTH_USER_MODEL = "users.User"
-
-    # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
-    # Force the `admin` sign in process to go through the `django-allauth` workflow
-    DJANGO_ADMIN_FORCE_ALLAUTH = values.BooleanValue(
-        default=False,
-        environ="DJANGO_ADMIN_FORCE_ALLAUTH",
-    )
 
     # Static Root: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
     STATIC_ROOT = str(BASE_DIR / "staticfiles")

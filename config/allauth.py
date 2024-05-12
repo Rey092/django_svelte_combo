@@ -9,6 +9,29 @@ class AllauthConfig:
     https://docs.allauth.org/en/latest/account/configuration.html
     """
 
+    # https://docs.allauth.org/en/latest/installation/quickstart.html
+    ALLAUTH_APPS = [
+        "allauth",
+        "allauth.account",
+        # "allauth.socialaccount",
+    ]
+
+    # https://docs.allauth.org/en/latest/installation/quickstart.html
+    ALLAUTH_MIDDLEWARE = [
+        "allauth.account.middleware.AuthenticationMiddleware",
+    ]
+
+    # `allauth` specific authentication methods, such as login by email
+    ALLAUTH_AUTHENTICATION_BACKENDS = [
+        "allauth.account.auth_backends.AuthenticationBackend",
+    ]
+
+    # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
+    # Force the `admin` sign in process to go through the `django-allauth` workflow
+    ADMIN_FORCE_ALLAUTH = values.BooleanValue(
+        default=False,
+    )
+    # https://docs.allauth.org/en/latest/account/configuration.html
     ACCOUNT_ALLOW_REGISTRATION = values.BooleanValue(default=True)
     # https://docs.allauth.org/en/latest/account/configuration.html
     ACCOUNT_AUTHENTICATION_METHOD = "email"
