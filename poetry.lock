@@ -802,6 +802,18 @@ doc = ["markdown-include", "mkdocs", "mkdocs-material", "mkdocstrings"]
 test = ["django-stubs", "mypy (==1.7.1)", "psycopg2-binary", "pytest", "pytest-asyncio", "pytest-cov", "pytest-django", "ruff (==0.1.7)"]
 
 [[package]]
+name = "django-ratelimit"
+version = "4.1.0"
+description = "Cache-based rate-limiting for Django."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "django-ratelimit-4.1.0.tar.gz", hash = "sha256:555943b283045b917ad59f196829530d63be2a39adb72788d985b90c81ba808b"},
+    {file = "django_ratelimit-4.1.0-py2.py3-none-any.whl", hash = "sha256:d047a31cf94d83ef1465d7543ca66c6fc16695559b5f8d814d1b51df15110b92"},
+]
+
+[[package]]
 name = "django-redis"
 version = "5.4.0"
 description = "Full featured redis cache backend for Django."
@@ -864,6 +876,24 @@ files = [
 
 [package.dependencies]
 django = ">=3.2"
+
+[[package]]
+name = "django-vite"
+version = "3.0.4"
+description = "Integration of Vite in a Django project."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-vite-3.0.4.tar.gz", hash = "sha256:043ab5068b4c66eb33cb26c5215a6dfe275d3c4de15d59b0b7b97b4567912fb0"},
+    {file = "django_vite-3.0.4-py3-none-any.whl", hash = "sha256:e4088e0c79b7c9cf013ebb2ae0117a8fa57646337a40e90209ba916d65f359d3"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+
+[package.extras]
+dev = ["black"]
 
 [[package]]
 name = "filelock"
@@ -1017,6 +1047,22 @@ files = [
     {file = "idna-3.7-py3-none-any.whl", hash = "sha256:82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0"},
     {file = "idna-3.7.tar.gz", hash = "sha256:028ff3aadf0609c1fd278d8ea3089299412a7a8b9bd005dd08b9f8285bcb5cfc"},
 ]
+
+[[package]]
+name = "inertia-django"
+version = "0.6.0"
+description = "Django adapter for the InertiaJS framework"
+category = "main"
+optional = false
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "inertia_django-0.6.0-py3-none-any.whl", hash = "sha256:362b02c20cbbb7eebe0a55c7ea4819831810ea42fc481f0611913ace91df531c"},
+    {file = "inertia_django-0.6.0.tar.gz", hash = "sha256:fdaf2557d357b755d7762b3fc0f39864b59071326f6524487ad0af173b4f8ec6"},
+]
+
+[package.dependencies]
+django = ">=4"
+requests = ">=2,<3"
 
 [[package]]
 name = "kombu"
@@ -1850,4 +1896,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "988c64c50c4ef024c7201bd6ee3446b760b186717c91dba9d3b6ea30e61a2250"
+content-hash = "19b319d5e36902be94fc569217537668824684a4a3b1dbfd7eaf8c2f6e7bafe5"

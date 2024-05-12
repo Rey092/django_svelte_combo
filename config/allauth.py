@@ -18,7 +18,7 @@ class AllauthConfig:
 
     # https://docs.allauth.org/en/latest/installation/quickstart.html
     ALLAUTH_MIDDLEWARE = [
-        "allauth.account.middleware.AuthenticationMiddleware",
+        "allauth.account.middleware.AccountMiddleware",
     ]
 
     # `allauth` specific authentication methods, such as login by email
@@ -28,8 +28,9 @@ class AllauthConfig:
 
     # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
     # Force the `admin` sign in process to go through the `django-allauth` workflow
-    ADMIN_FORCE_ALLAUTH = values.BooleanValue(
+    DJANGO_ADMIN_FORCE_ALLAUTH = values.BooleanValue(
         default=False,
+        environ_prefix=None,
     )
     # https://docs.allauth.org/en/latest/account/configuration.html
     ACCOUNT_ALLOW_REGISTRATION = values.BooleanValue(default=True)

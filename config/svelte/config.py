@@ -3,41 +3,41 @@
 from pathlib import Path
 
 from configurations import values
-from ninja.responses import NinjaJSONEncoder
+from inertia.utils import InertiaJsonEncoder
+
+# TODO: from ninja.responses import NinjaJSONEncoder
 
 
 # noinspection PyPep8Naming
-class SvelteConfig:
+class InertiaConfig:
     """Svelte configuration class."""
 
     # variables
     DEBUG: bool
-    BASE_DIR: Path
+    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
 
     # installed apps
-    SVELTE_INSTALLED_APPS = [
+    INERTIA_INSTALLED_APPS = [
         "inertia",
         "django_vite",
     ]
 
     # middleware
-    SVELTE_MIDDLEWARE = [
-        "base.inertia.middleware.InertiaMiddleware",
+    INERTIA_MIDDLEWARE = [
+        "config.svelte.middleware.InertiaMiddleware",
     ]
+
+    # dirs
+    INERTIA_STATICFILES_DIRS = [BASE_DIR / "dist"]
 
     # Django Vite server port for local development.
     DJANGO_VITE_DEV_SERVER_PORT = values.IntegerValue(3000, environ_prefix=None)
 
     # Inertia: https://github.com/inertiajs/inertia-django
-    INERTIA_LAYOUT = "svelte.html"
+    INERTIA_LAYOUT = "inertia.html"
     INERTIA_SSR_ENABLED = False
     INERTIA_VERSION = "1.0.0"
-    INERTIA_JSON_ENCODER = NinjaJSONEncoder
-
-    @property
-    def SVELTE_STATICFILES_DIRS(self):  # noqa: N802
-        """Path to the ViteJS build assets."""
-        return [self.BASE_DIR / "dist"]
+    INERTIA_JSON_ENCODER = InertiaJsonEncoder
 
     @property
     def DJANGO_VITE_DEV_MODE(self):  # noqa: N802

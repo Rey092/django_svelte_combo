@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from config.allauth import AllauthConfig
 from config.celery.config import CeleryConfig
 from config.celery.schedule import CeleryScheduleConfig
-from config.svelte.config import SvelteConfig
+from config.svelte.config import InertiaConfig
 from config.telegram.config import TelegramConfig
 from config.unfold import UnfoldConfig
 
@@ -17,7 +17,7 @@ from config.unfold import UnfoldConfig
 # noinspection PyPep8Naming
 class Base(
     TelegramConfig,
-    SvelteConfig,
+    InertiaConfig,
     AllauthConfig,
     UnfoldConfig,
     CeleryScheduleConfig,
@@ -57,6 +57,7 @@ class Base(
         "django_celery_beat",
         "django_celery_results",
         "django_telegram_logging",
+        *InertiaConfig.INERTIA_INSTALLED_APPS,
     ]
     LOCAL_APPS = ["src.core", "src.users", "src.adminlte"]
 
@@ -78,6 +79,7 @@ class Base(
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
         *AllauthConfig.ALLAUTH_MIDDLEWARE,
+        *InertiaConfig.INERTIA_MIDDLEWARE,
     ]
 
     # Default primary key field type: https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -156,7 +158,7 @@ class Base(
     # Static Dirs: https://docs.djangoproject.com/en/dev/ref/settings/#staticfiles-dirs
     STATICFILES_DIRS = [
         BASE_DIR / "static",
-        *SvelteConfig.SVELTE_STATICFILES_DIRS,
+        # *SvelteConfig.SVELTE_STATICFILES_DIRS,
     ]
     # Static Finders: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
     STATICFILES_FINDERS = [
@@ -226,7 +228,11 @@ class Base(
     @property
     def INSTALLED_APPS(self):  # noqa: N802
         """Combine all installed apps."""
-        return self.DJANGO_APPS + self.THIRD_PARTY_APPS + self.LOCAL_APPS
+        return [
+            *self.DJANGO_APPS,
+            *self.THIRD_PARTY_APPS,
+            *self.LOCAL_APPS,
+        ]
 
     @property
     def DATABASES(self):  # noqa: N802
@@ -302,31 +308,34 @@ class Base(
         ]
 
 
+# noinspection PyUnreachableCode
 class Local(Base):
     """Local configuration."""
 
     # Email backend: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
     EMAIL_BACKEND = values.Value("django.core.mail.backends.console.EmailBackend")
 
+    # TODO: check all those debug toolbars
     # django-debug-toolbar: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
-    THIRD_PARTY_APPS = [*Base.THIRD_PARTY_APPS, "debug_toolbar"]
-    # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
-    MIDDLEWARE = [
-        *Base.MIDDLEWARE,
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
-    ]
-    # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
-    DEBUG_TOOLBAR_CONFIG = {
-        "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
-        "SHOW_TEMPLATE_CONTEXT": True,
-    }
+    if False:
+        THIRD_PARTY_APPS = [*Base.THIRD_PARTY_APPS, "debug_toolbar"]
+        # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
+        MIDDLEWARE = [
+            *Base.MIDDLEWARE,
+            "debug_toolbar.middleware.DebugToolbarMiddleware",
+        ]
+        # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
+        DEBUG_TOOLBAR_CONFIG = {
+            "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
+            "SHOW_TEMPLATE_CONTEXT": True,
+        }
 
-    # requests-tracker: https://pypi.org/project/requests-tracker/#install-the-package
-    THIRD_PARTY_APPS = [*THIRD_PARTY_APPS, "requests_tracker"]
-    MIDDLEWARE = [
-        *MIDDLEWARE,
-        "requests_tracker.middleware.requests_tracker_middleware",
-    ]
+        # requests-tracker: https://pypi.org/project/requests-tracker/#install-the-package
+        THIRD_PARTY_APPS = [*THIRD_PARTY_APPS, "requests_tracker"]
+        MIDDLEWARE = [
+            *MIDDLEWARE,
+            "requests_tracker.middleware.requests_tracker_middleware",
+        ]
 
     # ips: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
     INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
