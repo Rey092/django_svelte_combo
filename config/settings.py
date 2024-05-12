@@ -7,9 +7,9 @@ from configurations import values
 from django.utils.translation import gettext_lazy as _
 
 from config.allauth import AllauthConfig
-from config.celery_config import CeleryConfig
-from config.celery_schedule import CeleryScheduleConfig
-from config.telegram import TelegramConfig
+from config.celery.config import CeleryConfig
+from config.celery.schedule import CeleryScheduleConfig
+from config.telegram.config import TelegramConfig
 from config.unfold import UnfoldConfig
 
 
@@ -27,6 +27,8 @@ class Base(
     # Basic variables
     BASE_DIR = Path(__file__).resolve().parent.parent
     DOTENV = BASE_DIR / ".env"
+    BACKEND_URL = values.Value("http://localhost:8000")
+    PROJECT_TITLE = values.Value("My Awesome Project")
 
     # Secrets and APY keys
     SECRET_KEY = values.SecretValue()
@@ -54,6 +56,7 @@ class Base(
         "django_cleanup.apps.CleanupConfig",
         "django_celery_beat",
         "django_celery_results",
+        "django_telegram_logging",
     ]
     LOCAL_APPS = ["src.core", "src.users", "src.adminlte"]
 
@@ -174,36 +177,54 @@ class Base(
     # Email timeout: https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
     EMAIL_TIMEOUT = 5
 
-    # LOGGING
-    # ------------------------------------------------------------------------------
-    # https://docs.djangoproject.com/en/dev/ref/settings/#logging
-    # See https://docs.djangoproject.com/en/dev/topics/logging for
-    # more details on how to customize your logging configuration.
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "verbose": {
-                "format": "%(levelname)s %(asctime)s %(module)s "
-                "%(process)d %(thread)d %(message)s",
-            },
-        },
-        "handlers": {
-            "console": {
-                "level": "DEBUG",
-                "class": "logging.StreamHandler",
-                "formatter": "verbose",
-            },
-        },
-        "root": {"level": "INFO", "handlers": ["console"]},
-    }
-
     # Redis
     REDIS_URL = values.Value("redis://localhost:6379/0", environ_prefix="")
 
     # Superuser data
     SUPERUSER_EMAIL = values.Value()
     SUPERUSER_PASSWORD = values.Value()
+
+    # Logging: https://docs.djangoproject.com/en/5.0/topics/logging/
+    @property
+    def LOGGING(self):  # noqa: N802
+        """Logging configuration."""
+        return {
+            "version": 1,
+            "disable_existing_loggers": False,
+            "formatters": {
+                "verbose": {
+                    "format": "%(levelname)s %(asctime)s %(module)s "
+                    "%(process)d %(thread)d %(message)s",
+                },
+            },
+            "handlers": {
+                "console": {
+                    "level": "INFO",
+                    "class": "logging.StreamHandler",
+                    "formatter": "verbose",
+                },
+                "telegram": {
+                    "level": "ERROR",
+                    "class": "config.telegram.handler.CustomTelegramHandler",
+                },
+            },
+            "root": {
+                "handlers": ["console"],
+                "level": "INFO",
+            },
+            "loggers": {
+                "django.request": {
+                    "handlers": ["console", "telegram"],
+                    "level": "ERROR",
+                    "propagate": True,
+                },
+                "django.security.DisallowedHost": {
+                    "level": "ERROR",
+                    "handlers": ["console", "telegram"],
+                    "propagate": True,
+                },
+            },
+        }
 
     @property
     def INSTALLED_APPS(self):  # noqa: N802
@@ -323,62 +344,12 @@ class Local(Base):
     CELERY_TASK_EAGER_PROPAGATES = True
 
 
-class DockerLoggingMixin:
-    """Docker logging mixin."""
-
-    THIRD_PARTY_APPS = ["django_telegram_logging"]
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "filters": {
-            "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"},
-        },
-        "formatters": {
-            "verbose": {
-                "format": "%(levelname)s %(asctime)s %(module)s "
-                "%(process)d %(thread)d %(message)s",
-            },
-        },
-        "handlers": {
-            "telegram": {
-                "level": "ERROR",
-                "filters": ["require_debug_false"],
-                "class": "src.core.utils.telegram_logger.CustomTelegramHandler",
-            },
-            "console": {
-                "level": "DEBUG",
-                "class": "logging.StreamHandler",
-                "formatter": "verbose",
-            },
-        },
-        "root": {"level": "INFO", "handlers": ["console"]},
-        "loggers": {
-            "django.request": {
-                "handlers": ["telegram"],
-                "level": "ERROR",
-                "propagate": True,
-            },
-            "django.security.DisallowedHost": {
-                "level": "ERROR",
-                "handlers": ["console", "telegram"],
-                "propagate": True,
-            },
-        },
-    }
-
-
-class Dev(DockerLoggingMixin, Base):
+class Dev(Base):
     """Development configuration."""
 
-    # update apps
-    THIRD_PARTY_APPS = Base.THIRD_PARTY_APPS + DockerLoggingMixin.THIRD_PARTY_APPS
 
-
-class Prod(DockerLoggingMixin, Base):
+class Prod(Base):
     """Production configuration."""
-
-    # update apps
-    THIRD_PARTY_APPS = Base.THIRD_PARTY_APPS + DockerLoggingMixin.THIRD_PARTY_APPS
 
     # Security
     DEBUG = False

@@ -1,31 +1,42 @@
 [tool.poetry]
 name = "django-svelte-combo"
 version = "0.0.1"
-description = "Django-Svelte development-ready template"
-authors = ["Your Name <you@example.com>"]
+description = ""
+authors = []
 readme = "README.md"
-packages = [{include = "django_svelte_combo"}]
+packages = []
 
 [tool.poetry.dependencies]
+# main
 python = "^3.12"
 aiogram = "^3.6.0"
+# django utils
 django = "^5.0.6"
-django-configurations = "^2.5.1"
-psycopg2-binary = "^2.9.9"
 django-allauth = "^0.62.1"
-argon2-cffi = "^23.1.0"
 django-debug-toolbar = "^4.3.0"
 django-extensions = "^3.2.3"
 django-redis = "^5.4.0"
-requests-tracker = "^0.3.3"
 django-cleanup = "^8.1.0"
 django-unfold = "^0.22.0"
+django-configurations = "^2.5.1"
+# celery
 celery = "^5.4.0"
 django-celery-beat = "^2.6.0"
 django-celery-results = "^2.5.1"
+# database
+psycopg2-binary = "^2.9.9"
+# security
+argon2-cffi = "^23.1.0"
+# debug
+requests-tracker = "^0.3.3"
+# web-server
 gunicorn = "^22.0.0"
-pre-commit = "^3.7.1"
+django-telegram-logging = "^1.0.2"
+toml = "^0.10.2"
 
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.1"
 
 [build-system]
 requires = ["poetry-core"]

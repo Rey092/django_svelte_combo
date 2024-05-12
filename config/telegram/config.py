@@ -8,7 +8,7 @@ class TelegramConfig:
 
     TELEGRAM_TOKEN = TELEGRAM_LOGGING_TOKEN = values.Value(
         default=None,
-        environ_name="TELEGRAM_LOGGING_TOKEN",
+        environ_name="TELEGRAM_TOKEN",
         environ_prefix=None,
     )
     TELEGRAM_LOGGING_CHAT = values.Value(
