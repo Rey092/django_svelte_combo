@@ -27,5 +27,5 @@ jobs:
         poetry-version: ${{ matrix.poetry-version }}
     - name: Run Checks
       run: |
-        python manage.py check
-        python manage.py check --deploy
+        poetry run python manage.py check
+        poetry run python manage.py check --deploy
