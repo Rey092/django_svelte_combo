@@ -4,6 +4,7 @@ run:
 	python manage.py runserver
 
 init:
+	python manage.py migrate
 	python manage.py init_project
 	python manage.py runserver
 
@@ -11,11 +12,8 @@ init:
 # ------------------------------------------
 fix:
 	python manage.py reset_db --noinput
-	python manage.py migrate
 	rm -rf ./media/*
-	python manage.py currencies -i ALBA_CURRENCIES
-	python manage.py init_project
-	python manage.py runserver
+	make init
 
 migrations:
 	python manage.py makemigrations
@@ -35,10 +33,10 @@ compile:
 # CELERY
 # ------------------------------------------
 worker:
-	celery -A config.celery worker -l info --concurrency=2
+	celery -A config.celery_app worker -l info --concurrency=2
 
 beat:
-	celery -A config.celery beat -l info
+	celery -A config.celery_app beat -l info
 
 # Deployment commands
 # ------------------------------
@@ -50,5 +48,4 @@ run-dev:
 	gunicorn config.wsgi:application
 
 run-prod:
-	# TODO: Add prod
-	python manage.py runserver
+	gunicorn config.wsgi:application

@@ -6,12 +6,22 @@ from configurations import Configuration
 from configurations import values
 from django.utils.translation import gettext_lazy as _
 
-from config.schedule import CeleryScheduleConfig
+from config.allauth import AllauthConfig
+from config.celery_config import CeleryConfig
+from config.celery_schedule import CeleryScheduleConfig
+from config.telegram import TelegramConfig
 from config.unfold import UnfoldConfig
 
 
 # noinspection PyPep8Naming
-class Base(UnfoldConfig, CeleryScheduleConfig, Configuration):
+class Base(
+    TelegramConfig,
+    AllauthConfig,
+    UnfoldConfig,
+    CeleryScheduleConfig,
+    CeleryConfig,
+    Configuration,
+):
     """Base configuration."""
 
     # Basic variables
@@ -66,26 +76,6 @@ class Base(UnfoldConfig, CeleryScheduleConfig, Configuration):
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
         "allauth.account.middleware.AccountMiddleware",
     ]
-
-    # Database: https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": values.Value(environ_name="POSTGRES_DB"),
-            "USER": values.Value(environ_name="POSTGRES_USER"),
-            "PASSWORD": values.Value(environ_name="POSTGRES_PASSWORD"),
-            "HOST": values.Value(environ_name="POSTGRES_HOST"),
-            "PORT": values.IntegerValue(environ_name="POSTGRES_PORT"),
-            "ATOMIC_REQUESTS": values.BooleanValue(
-                default=True,
-                environ_name="POSTGRES_ATOMIC_REQUESTS",
-            ),
-            "CONN_MAX_AGE": values.IntegerValue(
-                default=60,
-                environ_name="POSTGRES_CONN_MAX_AGE",
-            ),
-        },
-    }
 
     # Default primary key field type: https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
     DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -209,105 +199,68 @@ class Base(UnfoldConfig, CeleryScheduleConfig, Configuration):
     }
 
     # Redis
-    REDIS_URL = values.Value("redis://localhost:6379/0", environ_name="REDIS_URL")
-
-    # Cache: https://docs.djangoproject.com/en/dev/ref/settings/#caches
-    CACHES = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_URL,
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-                # Mimicing memcache behavior.
-                # https://github.com/jazzband/django-redis#memcached-exceptions-behavior
-                "IGNORE_EXCEPTIONS": values.Value(
-                    default=False,
-                    environ_name="REDIS_IGNORE_EXCEPTIONS",
-                ),
-            },
-        },
-    }
-
-    # Celery
-    # ------------------------------------------------------------------------------
-    if USE_TZ:
-        # https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-timezone
-        CELERY_TIMEZONE = TIME_ZONE
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-broker_url
-    CELERY_BROKER_URL = values.Value(REDIS_URL, environ_name="CELERY_BROKER_URL")
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-result_backend
-    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#result-extended
-    CELERY_RESULT_EXTENDED = True
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#result-backend-always-retry
-    # https://github.com/celery/celery/pull/6122
-    CELERY_RESULT_BACKEND_ALWAYS_RETRY = True
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#result-backend-max-retries
-    CELERY_RESULT_BACKEND_MAX_RETRIES = 10
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-accept_content
-    CELERY_ACCEPT_CONTENT = ["json"]
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-task_serializer
-    CELERY_TASK_SERIALIZER = "json"
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-result_serializer
-    CELERY_RESULT_SERIALIZER = "json"
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-time-limit
-    # TODO: set to whatever value is adequate in your circumstances
-    CELERY_TASK_TIME_LIMIT = 5 * 60
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-soft-time-limit
-    # TODO: set to whatever value is adequate in your circumstances
-    CELERY_TASK_SOFT_TIME_LIMIT = 60
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#beat-scheduler
-    CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#worker-send-task-events
-    CELERY_WORKER_SEND_TASK_EVENTS = True
-    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#std-setting-task_send_sent_event
-    CELERY_TASK_SEND_SENT_EVENT = True
-
-    # django-allauth
-    # ------------------------------------------------------------------------------
-    ACCOUNT_ALLOW_REGISTRATION = values.BooleanValue(default=True)
-    # https://docs.allauth.org/en/latest/account/configuration.html
-    ACCOUNT_AUTHENTICATION_METHOD = "email"
-    # https://docs.allauth.org/en/latest/account/configuration.html
-    ACCOUNT_EMAIL_REQUIRED = True
-    # https://docs.allauth.org/en/latest/account/configuration.html
-    ACCOUNT_USERNAME_REQUIRED = False
-    # https://docs.allauth.org/en/latest/account/configuration.html
-    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-    # https://docs.allauth.org/en/latest/account/configuration.html
-    ACCOUNT_EMAIL_VERIFICATION = "none"
-    # https://docs.allauth.org/en/latest/account/configuration.html
-    ACCOUNT_ADAPTER = "src.users.adapters.AccountAdapter"
-    # https://docs.allauth.org/en/latest/account/forms.html
-    ACCOUNT_FORMS = {"signup": "src.users.forms.UserSignupForm"}
-    # https://docs.allauth.org/en/latest/socialaccount/configuration.html
-    SOCIALACCOUNT_ADAPTER = "src.users.adapters.SocialAccountAdapter"
-    # https://docs.allauth.org/en/latest/socialaccount/configuration.html
-    SOCIALACCOUNT_FORMS = {"signup": "src.users.forms.UserSocialSignupForm"}
+    REDIS_URL = values.Value("redis://localhost:6379/0", environ_prefix="")
 
     # Superuser data
     SUPERUSER_EMAIL = values.Value()
     SUPERUSER_PASSWORD = values.Value()
 
-    # Telegram (for logging)
-    # ------------------------------------------------------------------------------
-    TELEGRAM_TOKEN = TELEGRAM_LOGGING_TOKEN = values.Value(
-        default=None,
-        environ_name="TELEGRAM_LOGGING_TOKEN",
-    )
-    TELEGRAM_LOGGING_CHAT = values.Value(
-        default=None,
-        environ_name="TELEGRAM_LOGGING_CHAT",
-    )
-    TELEGRAM_LOGGING_EMIT_ON_DEBUG = values.Value(
-        default=False,
-        environ_name="TELEGRAM_LOGGING_EMIT_ON_DEBUG",
-    )
-
     @property
     def INSTALLED_APPS(self):  # noqa: N802
         """Combine all installed apps."""
         return self.DJANGO_APPS + self.THIRD_PARTY_APPS + self.LOCAL_APPS
+
+    @property
+    def DATABASES(self):  # noqa: N802
+        """Database configuration.
+
+        https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+        """
+        return {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": values.Value(environ_name="POSTGRES_DB", environ_prefix=None),
+                "USER": values.Value(environ_name="POSTGRES_USER", environ_prefix=None),
+                "PASSWORD": values.Value(
+                    environ_name="POSTGRES_PASSWORD", environ_prefix=None
+                ),
+                "HOST": values.Value(environ_name="POSTGRES_HOST", environ_prefix=None),
+                "PORT": values.IntegerValue(
+                    environ_name="POSTGRES_PORT", environ_prefix=None
+                ),
+                "ATOMIC_REQUESTS": values.BooleanValue(
+                    default=True,
+                    environ_name="POSTGRES_ATOMIC_REQUESTS",
+                    environ_prefix=None,
+                ),
+                "CONN_MAX_AGE": values.IntegerValue(
+                    default=60,
+                    environ_name="POSTGRES_CONN_MAX_AGE",
+                    environ_prefix=None,
+                ),
+            },
+        }
+
+    def CACHES(self):  # noqa: N802
+        """Cache configuration.
+
+        https://docs.djangoproject.com/en/dev/ref/settings/#caches
+        """
+        return {
+            "default": {
+                "BACKEND": "django_redis.cache.RedisCache",
+                "LOCATION": self.REDIS_URL,
+                "OPTIONS": {
+                    "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                    # Mimicing memcache behavior.
+                    # https://github.com/jazzband/django-redis#memcached-exceptions-behavior
+                    "IGNORE_EXCEPTIONS": values.Value(
+                        default=False,
+                        environ_name="REDIS_IGNORE_EXCEPTIONS",
+                    ),
+                },
+            },
+        }
 
     @property
     def TEMPLATES(self):  # noqa: N802

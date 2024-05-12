@@ -1,4 +1,4 @@
-# Project Name
+# Django-Svelte-Combo
 
 This is a template project for future Django projects. It is designed to be a starting point for any new Django project, providing a solid foundation of best practices and sensible defaults.
 
@@ -22,11 +22,10 @@ This is a template project for future Django projects. It is designed to be a st
 
 To initialize the project, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/username/project.git`
-2. Navigate to the project directory: `cd project`
-3. Install the requirements: `pip install -r requirements.txt`
-4. Initialize the project: `make init`
-5. Run the server: `make run`
+1. Clone the repository: `git clone https://github.com/Rey092/django_svelte_combo .`
+2. Install the requirements: `poetry install`
+3. Initialize the project: `make init`
+4. Run the server: `make run`
 
 ## Commands
 
