@@ -1,3 +1,5 @@
+"""Celery tasks for the user's app."""
+
 from django.conf import settings
 
 

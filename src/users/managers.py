@@ -1,3 +1,5 @@
+"""Custom manager for the User model."""
+
 from typing import TYPE_CHECKING
 
 from django.contrib.auth.hashers import make_password
@@ -11,9 +13,7 @@ class UserManager(DjangoUserManager["User"]):
     """Custom manager for the User model."""
 
     def _create_user(self, email: str, password: str | None, **extra_fields):
-        """
-        Create and save a user with the given email and password.
-        """
+        """Create and save a user with the given email and password."""
         if not email:
             msg = "The given email must be set"
             raise ValueError(msg)
@@ -24,11 +24,13 @@ class UserManager(DjangoUserManager["User"]):
         return user
 
     def create_user(self, email: str, password: str | None = None, **extra_fields):  # type: ignore[override]
+        """Create and save a User with the given email and password."""
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email: str, password: str | None = None, **extra_fields):  # type: ignore[override]
+        """Create and save a Superuser with the given email and password."""
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 

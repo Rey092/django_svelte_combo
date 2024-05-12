@@ -1,34 +1,30 @@
-"""
-Django settings for a project.
-"""
-import os
+"""Django settings for a project."""
+
 from pathlib import Path
-from configurations import Configuration, values
-from django.urls import reverse_lazy
+
+from configurations import Configuration
+from configurations import values
 from django.utils.translation import gettext_lazy as _
+
 from config.schedule import CeleryScheduleConfig
 from config.unfold import UnfoldConfig
 
 
 # noinspection PyPep8Naming
-class Base(
-    UnfoldConfig,
-    CeleryScheduleConfig,
-    Configuration
-):
+class Base(UnfoldConfig, CeleryScheduleConfig, Configuration):
     """Base configuration."""
 
     # Basic variables
     BASE_DIR = Path(__file__).resolve().parent.parent
-    DOTENV = os.path.join(BASE_DIR, '.env')
+    DOTENV = BASE_DIR / ".env"
 
     # Secrets and APY keys
     SECRET_KEY = values.SecretValue()
-    API_KEY = values.Value('91011')
+    API_KEY = values.Value("91011")
 
     # Security
-    DEBUG = values.BooleanValue(True)
-    ALLOWED_HOSTS = values.ListValue(['*'])
+    DEBUG = values.BooleanValue(default=True)
+    ALLOWED_HOSTS = values.ListValue(["*"])
 
     # Application definitions
     DJANGO_APPS = [
@@ -49,11 +45,7 @@ class Base(
         "django_celery_beat",
         "django_celery_results",
     ]
-    LOCAL_APPS = [
-        "src.core",
-        "src.users",
-        "src.adminlte"
-    ]
+    LOCAL_APPS = ["src.core", "src.users", "src.adminlte"]
 
     # Templates
     TEMPLATES_DIRS = []
@@ -78,39 +70,45 @@ class Base(
     # Database: https://docs.djangoproject.com/en/5.0/ref/settings/#databases
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "ENGINE": "django.db.backends.postgresql",
             "NAME": values.Value(environ_name="POSTGRES_DB"),
             "USER": values.Value(environ_name="POSTGRES_USER"),
             "PASSWORD": values.Value(environ_name="POSTGRES_PASSWORD"),
             "HOST": values.Value(environ_name="POSTGRES_HOST"),
             "PORT": values.IntegerValue(environ_name="POSTGRES_PORT"),
-            "ATOMIC_REQUESTS": values.BooleanValue(True, environ_name="POSTGRES_ATOMIC_REQUESTS"),
-            "CONN_MAX_AGE": values.IntegerValue(60, environ_name="POSTGRES_CONN_MAX_AGE"),
-        }
+            "ATOMIC_REQUESTS": values.BooleanValue(
+                default=True,
+                environ_name="POSTGRES_ATOMIC_REQUESTS",
+            ),
+            "CONN_MAX_AGE": values.IntegerValue(
+                default=60,
+                environ_name="POSTGRES_CONN_MAX_AGE",
+            ),
+        },
     }
 
     # Default primary key field type: https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-    DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+    DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
     # Internationalization: https://docs.djangoproject.com/en/5.0/topics/i18n/
     USE_I18N = True
     USE_TZ = True
-    LANGUAGE_CODE = 'en-us'
+    LANGUAGE_CODE = "en-us"
     LANGUAGES = [
-        ('en', _('English')),
+        ("en", _("English")),
     ]
     LOCALE_PATHS = [
-        os.path.join(BASE_DIR, "locale"),
+        BASE_DIR / "locale",
     ]
 
     # Timezone
-    TIME_ZONE = 'UTC'
+    TIME_ZONE = "UTC"
 
     # Site ID
     SITE_ID = 1
 
     # URL configurations
-    ROOT_URLCONF = values.Value('config.urls')
+    ROOT_URLCONF = values.Value("config.urls")
     ADMIN_URL = values.Value("admin/")
     ROSETTA_LOGIN_URL = f"/{ADMIN_URL}/login/"
 
@@ -121,7 +119,7 @@ class Base(
     LOGIN_REDIRECT_URL = values.Value("/")
 
     # Applications: https://docs.djangoproject.com/en/5.0/ref/settings/#wsgi-application
-    WSGI_APPLICATION = 'config.wsgi.application'
+    WSGI_APPLICATION = "config.wsgi.application"
 
     # https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
     PASSWORD_HASHERS = [
@@ -133,10 +131,19 @@ class Base(
 
     # Password validation: https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
     AUTH_PASSWORD_VALIDATORS = [
-        {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-        {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-        {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-        {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+        {
+            "NAME": "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator",
+        },
+        {
+            "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        },
+        {
+            "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        },
+        {
+            "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        },
     ]
 
     # Authentication: https://docs.djangoproject.com/en/5.0/ref/settings/#authentication-backends
@@ -152,7 +159,10 @@ class Base(
 
     # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
     # Force the `admin` sign in process to go through the `django-allauth` workflow
-    DJANGO_ADMIN_FORCE_ALLAUTH = values.BooleanValue(False, environ="DJANGO_ADMIN_FORCE_ALLAUTH")
+    DJANGO_ADMIN_FORCE_ALLAUTH = values.BooleanValue(
+        default=False,
+        environ="DJANGO_ADMIN_FORCE_ALLAUTH",
+    )
 
     # Static Root: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
     STATIC_ROOT = str(BASE_DIR / "staticfiles")
@@ -184,7 +194,8 @@ class Base(
         "disable_existing_loggers": False,
         "formatters": {
             "verbose": {
-                "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+                "format": "%(levelname)s %(asctime)s %(module)s "
+                "%(process)d %(thread)d %(message)s",
             },
         },
         "handlers": {
@@ -202,16 +213,19 @@ class Base(
 
     # Cache: https://docs.djangoproject.com/en/dev/ref/settings/#caches
     CACHES = {
-        'default': {
+        "default": {
             "BACKEND": "django_redis.cache.RedisCache",
             "LOCATION": REDIS_URL,
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
                 # Mimicing memcache behavior.
                 # https://github.com/jazzband/django-redis#memcached-exceptions-behavior
-                "IGNORE_EXCEPTIONS": values.Value(False, environ_name="REDIS_IGNORE_EXCEPTIONS")
+                "IGNORE_EXCEPTIONS": values.Value(
+                    default=False,
+                    environ_name="REDIS_IGNORE_EXCEPTIONS",
+                ),
             },
-        }
+        },
     }
 
     # Celery
@@ -251,7 +265,7 @@ class Base(
 
     # django-allauth
     # ------------------------------------------------------------------------------
-    ACCOUNT_ALLOW_REGISTRATION = values.BooleanValue(True)
+    ACCOUNT_ALLOW_REGISTRATION = values.BooleanValue(default=True)
     # https://docs.allauth.org/en/latest/account/configuration.html
     ACCOUNT_AUTHENTICATION_METHOD = "email"
     # https://docs.allauth.org/en/latest/account/configuration.html
@@ -277,24 +291,34 @@ class Base(
 
     # Telegram (for logging)
     # ------------------------------------------------------------------------------
-    TELEGRAM_TOKEN = TELEGRAM_LOGGING_TOKEN = values.Value(None, environ_name="TELEGRAM_LOGGING_TOKEN")
-    TELEGRAM_LOGGING_CHAT = values.Value(None, environ_name="TELEGRAM_LOGGING_CHAT")
-    TELEGRAM_LOGGING_EMIT_ON_DEBUG = values.Value(False, environ_name="TELEGRAM_LOGGING_EMIT_ON_DEBUG")
+    TELEGRAM_TOKEN = TELEGRAM_LOGGING_TOKEN = values.Value(
+        default=None,
+        environ_name="TELEGRAM_LOGGING_TOKEN",
+    )
+    TELEGRAM_LOGGING_CHAT = values.Value(
+        default=None,
+        environ_name="TELEGRAM_LOGGING_CHAT",
+    )
+    TELEGRAM_LOGGING_EMIT_ON_DEBUG = values.Value(
+        default=False,
+        environ_name="TELEGRAM_LOGGING_EMIT_ON_DEBUG",
+    )
 
     @property
-    def INSTALLED_APPS(self):
+    def INSTALLED_APPS(self):  # noqa: N802
         """Combine all installed apps."""
         return self.DJANGO_APPS + self.THIRD_PARTY_APPS + self.LOCAL_APPS
 
     @property
-    def TEMPLATES(self):
+    def TEMPLATES(self):  # noqa: N802
+        """Templates configuration."""
         return [
             {
-                'BACKEND': 'django.template.backends.django.DjangoTemplates',
-                'DIRS': self.TEMPLATES_DIRS,
-                'APP_DIRS': self.TEMPLATES_APP_DIRS,
-                'OPTIONS': {
-                    'context_processors': [
+                "BACKEND": "django.template.backends.django.DjangoTemplates",
+                "DIRS": self.TEMPLATES_DIRS,
+                "APP_DIRS": self.TEMPLATES_APP_DIRS,
+                "OPTIONS": {
+                    "context_processors": [
                         "django.template.context_processors.debug",
                         "django.template.context_processors.request",
                         "django.contrib.auth.context_processors.auth",
@@ -314,9 +338,12 @@ class Local(Base):
     EMAIL_BACKEND = values.Value("django.core.mail.backends.console.EmailBackend")
 
     # django-debug-toolbar: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
-    THIRD_PARTY_APPS = Base.THIRD_PARTY_APPS + ["debug_toolbar"]
+    THIRD_PARTY_APPS = [*Base.THIRD_PARTY_APPS, "debug_toolbar"]
     # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
-    MIDDLEWARE = Base.MIDDLEWARE + ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+    MIDDLEWARE = [
+        *Base.MIDDLEWARE,
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
     # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
     DEBUG_TOOLBAR_CONFIG = {
         "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
@@ -324,14 +351,18 @@ class Local(Base):
     }
 
     # requests-tracker: https://pypi.org/project/requests-tracker/#install-the-package
-    THIRD_PARTY_APPS = THIRD_PARTY_APPS + ["requests_tracker"]
-    MIDDLEWARE = MIDDLEWARE + ["requests_tracker.middleware.requests_tracker_middleware"]
+    THIRD_PARTY_APPS = [*THIRD_PARTY_APPS, "requests_tracker"]
+    MIDDLEWARE = [
+        *MIDDLEWARE,
+        "requests_tracker.middleware.requests_tracker_middleware",
+    ]
 
     # ips: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
     INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
-    USE_DOCKER = values.BooleanValue(False)
+    USE_DOCKER = values.BooleanValue(default=False)
     if USE_DOCKER:
         import socket
+
         hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
         INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
@@ -346,10 +377,13 @@ class DockerLoggingMixin:
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": False,
-        "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+        "filters": {
+            "require_debug_false": {"()": "django.utils.log.RequireDebugFalse"},
+        },
         "formatters": {
             "verbose": {
-                "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+                "format": "%(levelname)s %(asctime)s %(module)s "
+                "%(process)d %(thread)d %(message)s",
             },
         },
         "handlers": {
@@ -400,10 +434,10 @@ class Prod(DockerLoggingMixin, Base):
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True
     SECURE_HSTS_SECONDS = 518400
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = values.BooleanValue(True)
-    SECURE_HSTS_PRELOAD = values.BooleanValue(True)
-    SECURE_CONTENT_TYPE_NOSNIFF = values.BooleanValue(True)
-    SECURE_SSL_REDIRECT = values.BooleanValue(True)
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = values.BooleanValue(default=True)
+    SECURE_HSTS_PRELOAD = values.BooleanValue(default=True)
+    SECURE_CONTENT_TYPE_NOSNIFF = values.BooleanValue(default=True)
+    SECURE_SSL_REDIRECT = values.BooleanValue(default=True)
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
@@ -420,11 +454,11 @@ class Test(Base):
     """Test configuration."""
 
     # Speed up tests: https://docs.djangoproject.com/en/5.0/topics/testing/overview/#speeding-up-the-tests
-    PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
-    TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+    PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+    TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
     # Email: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+    EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
     # Templates
     TEMPLATES_DEBUG = True

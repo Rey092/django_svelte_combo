@@ -1,14 +1,16 @@
-"""Create a test task"""
+"""Create a test task."""
+
 import logging
+
 from celery import shared_task
 from celery.signals import celeryd_init
-
 
 logger = logging.getLogger(__name__)
 
 
 @shared_task
 def hello_world():
+    """Log hello world statement."""
     logger.info("Hello, World!")
 
 

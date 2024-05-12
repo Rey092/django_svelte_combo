@@ -1,4 +1,5 @@
 """Unfold configuration."""
+
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -10,10 +11,6 @@ class UnfoldConfig:
     DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
     UNFOLD = {
         "SITE_TITLE": "Адміністрування Django",
-        # "SITE_HEADER": None,
-        # "SITE_URL": "https://google.com",
-        # "SITE_ICON": lambda request: static("img/logo.png"),
-        # "SITE_LOGO": lambda request: static("img/logo.png"),
         "SITE_SYMBOL": "speed",  # symbol from icon set
         "SHOW_HISTORY": False,  # show/hide "History" button, default: True
         "SHOW_VIEW_ON_SITE": False,  # show/hide "View on site" button, default: True
@@ -62,8 +59,10 @@ class UnfoldConfig:
                         {
                             "title": _("Періодичні завдання"),
                             "icon": "schedule",
-                            "link": reverse_lazy("admin:django_celery_beat_periodictask_changelist"),
-                        }
+                            "link": reverse_lazy(
+                                "admin:django_celery_beat_periodictask_changelist",
+                            ),
+                        },
                     ],
                 },
             ],
@@ -78,20 +77,26 @@ class UnfoldConfig:
                 "items": [
                     {
                         "title": _("Періодичні завдання"),
-                        "link": reverse_lazy("admin:django_celery_beat_periodictask_changelist"),
+                        "link": reverse_lazy(
+                            "admin:django_celery_beat_periodictask_changelist",
+                        ),
                         "permission": lambda request: request.user.is_superuser,
                     },
                     {
                         "title": _("Результати завдань"),
-                        "link": reverse_lazy("admin:django_celery_results_taskresult_changelist"),
+                        "link": reverse_lazy(
+                            "admin:django_celery_results_taskresult_changelist",
+                        ),
                         "permission": lambda request: request.user.is_superuser,
                     },
                     {
                         "title": _("Розклади"),
-                        "link": reverse_lazy("admin:django_celery_beat_crontabschedule_changelist"),
+                        "link": reverse_lazy(
+                            "admin:django_celery_beat_crontabschedule_changelist",
+                        ),
                         "permission": lambda request: request.user.is_superuser,
                     },
                 ],
-            }
+            },
         ],
     }

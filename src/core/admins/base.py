@@ -1,4 +1,5 @@
 """Base admin."""
+
 from unfold.admin import ModelAdmin
 
 

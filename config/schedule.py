@@ -1,4 +1,5 @@
 """Celery tasks schedule."""
+
 from celery.schedules import crontab
 
 

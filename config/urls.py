@@ -1,10 +1,10 @@
-"""
-URL configuration for a project.
-"""
+"""URL configuration for a project."""
+
 from django.conf import settings
-from django.contrib import admin
-from django.urls import path, include
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include
+from django.urls import path
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
