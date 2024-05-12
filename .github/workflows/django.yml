@@ -22,8 +22,10 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-        poetry-version: ${{ matrix.poetry-version }}
     - name: Install Dependencies
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: ${{ matrix.poetry-version }}
       run: |
         poetry install
     - name: Run Checks
