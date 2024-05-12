@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from config.allauth import AllauthConfig
 from config.celery.config import CeleryConfig
 from config.celery.schedule import CeleryScheduleConfig
+from config.svelte.config import SvelteConfig
 from config.telegram.config import TelegramConfig
 from config.unfold import UnfoldConfig
 
@@ -16,6 +17,7 @@ from config.unfold import UnfoldConfig
 # noinspection PyPep8Naming
 class Base(
     TelegramConfig,
+    SvelteConfig,
     AllauthConfig,
     UnfoldConfig,
     CeleryScheduleConfig,
@@ -151,6 +153,11 @@ class Base(
     STATIC_ROOT = str(BASE_DIR / "staticfiles")
     # Static Url: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
     STATIC_URL = "/static/"
+    # Static Dirs: https://docs.djangoproject.com/en/dev/ref/settings/#staticfiles-dirs
+    STATICFILES_DIRS = [
+        BASE_DIR / "static",
+        *SvelteConfig.SVELTE_STATICFILES_DIRS,
+    ]
     # Static Finders: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
     STATICFILES_FINDERS = [
         "django.contrib.staticfiles.finders.FileSystemFinder",

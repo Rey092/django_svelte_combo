@@ -33,6 +33,7 @@ requests-tracker = "^0.3.3"
 gunicorn = "^22.0.0"
 django-telegram-logging = "^1.0.2"
 toml = "^0.10.2"
+django-ninja = "^1.1.0"
 
 
 [tool.poetry.group.dev.dependencies]
