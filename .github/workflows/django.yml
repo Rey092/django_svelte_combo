@@ -27,9 +27,9 @@ jobs:
         poetry-version: ${{ matrix.poetry-version }}
     - name: Use poetry to install through pip
       run: |
-        RUN poetry export -f requirements.txt --without-hashes --only main -o requirements.txt
-        RUN pip install -r requirements.txt
-        RUN rm requirements.txt
+        poetry export -f requirements.txt --without-hashes --only main -o requirements.txt
+        pip install -r requirements.txt
+        rm requirements.txt
     - name: Run Checks
       run: |
         python manage.py check
