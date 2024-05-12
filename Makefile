@@ -12,6 +12,7 @@ init:
 	python manage.py init_project
 	python manage.py runserver
 
+
 # DATABASE
 # ------------------------------------------
 fix:
