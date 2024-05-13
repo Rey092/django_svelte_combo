@@ -29,11 +29,11 @@ class TelegramEmitter:
             sep="\n",
         )
 
-    def emit_sync(self, message: str, html_message: str | None) -> None:
+    def emit_sync(self, message: str, html_message: str | None = None) -> None:
         """Emit a message."""
         async_to_sync(self.emit)(message=message, html_message=html_message)
 
-    async def emit(self, message: str, html_message: str | None) -> None:
+    async def emit(self, message: str, html_message: str | None = None) -> None:
         """Emit a message."""
         # prepare text
         text: fmt.text = self._prepare_text(message)

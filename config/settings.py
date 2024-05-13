@@ -12,6 +12,7 @@ from config.celery.config import CeleryLocalConfig
 from config.celery.schedule import CeleryScheduleConfig
 from config.svelte.config import InertiaConfig
 from config.telegram.config import TelegramConfig
+from config.telegram.config import TelegramLoggingConfig
 from config.unfold import UnfoldConfig
 
 
@@ -184,47 +185,29 @@ class Base(
     SUPERUSER_EMAIL = values.Value()
     SUPERUSER_PASSWORD = values.Value()
 
-    # Logging: https://docs.djangoproject.com/en/5.0/topics/logging/
-    @property
-    def LOGGING(self):  # noqa: N802
-        """Logging configuration."""
-        return {
-            "version": 1,
-            "disable_existing_loggers": False,
-            "formatters": {
-                "verbose": {
-                    "format": "%(levelname)s %(asctime)s %(module)s "
-                    "%(process)d %(thread)d %(message)s",
-                },
+    # LOGGING
+    # ------------------------------------------------------------------------------
+    # https://docs.djangoproject.com/en/dev/ref/settings/#logging
+    # See https://docs.djangoproject.com/en/dev/topics/logging for
+    # more details on how to customize your logging configuration.
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "verbose": {
+                "format": "%(levelname)s %(asctime)s %(module)s "
+                "%(process)d %(thread)d %(message)s",
             },
-            "handlers": {
-                "console": {
-                    "level": "INFO",
-                    "class": "logging.StreamHandler",
-                    "formatter": "verbose",
-                },
-                "telegram": {
-                    "level": "ERROR",
-                    "class": "config.telegram.handler.CustomTelegramHandler",
-                },
+        },
+        "handlers": {
+            "console": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "verbose",
             },
-            "root": {
-                "handlers": ["console"],
-                "level": "INFO",
-            },
-            "loggers": {
-                "django.request": {
-                    "handlers": ["console", "telegram"],
-                    "level": "ERROR",
-                    "propagate": True,
-                },
-                "django.security.DisallowedHost": {
-                    "level": "ERROR",
-                    "handlers": ["console", "telegram"],
-                    "propagate": True,
-                },
-            },
-        }
+        },
+        "root": {"level": "INFO", "handlers": ["console"]},
+    }
 
     @property
     def INSTALLED_APPS(self):  # noqa: N802
@@ -346,11 +329,11 @@ class Local(CeleryLocalConfig, Base):
         INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
 
-class Dev(Base):
+class Dev(TelegramLoggingConfig, Base):
     """Development configuration."""
 
 
-class Prod(Base):
+class Prod(TelegramLoggingConfig, Base):
     """Production configuration."""
 
     # Security
