@@ -53,3 +53,12 @@ class CeleryConfig:
         return values.Value(
             self.REDIS_URL, environ_prefix=None, environ_name="CELERY_BROKER_URL"
         )
+
+
+class CeleryLocalConfig(CeleryConfig):
+    """Celery configuration settings for local development."""
+
+    # Eager https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-always-eager
+    CELERY_TASK_ALWAYS_EAGER = values.BooleanValue(default=True, environ_prefix=None)
+    # Celery propagation: https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-eager-propagates
+    CELERY_TASK_EAGER_PROPAGATES = True

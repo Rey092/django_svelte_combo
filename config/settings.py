@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from config.allauth import AllauthConfig
 from config.celery.config import CeleryConfig
+from config.celery.config import CeleryLocalConfig
 from config.celery.schedule import CeleryScheduleConfig
 from config.svelte.config import InertiaConfig
 from config.telegram.config import TelegramConfig
@@ -309,7 +310,7 @@ class Base(
 
 
 # noinspection PyUnreachableCode
-class Local(Base):
+class Local(CeleryLocalConfig, Base):
     """Local configuration."""
 
     # Email backend: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
@@ -343,9 +344,6 @@ class Local(Base):
 
         hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
         INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
-
-    # Celery propagation: https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-eager-propagates
-    CELERY_TASK_EAGER_PROPAGATES = True
 
 
 class Dev(Base):
