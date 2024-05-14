@@ -4,7 +4,7 @@ run:
 	python manage.py runserver
 
 svelte:
-	cd frontend && npm install
+	cd frontend && npm install --force
 	cd frontend && npm run dev
 
 init:

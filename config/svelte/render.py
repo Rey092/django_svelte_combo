@@ -5,6 +5,7 @@ from json import dumps as json_encode
 
 from django.conf import settings
 from django.http import HttpRequest as InertiaRequest
+from inertia.utils import InertiaJsonEncoder
 from inertia.utils import LazyProp
 
 from config.svelte.base_render import base_render
@@ -72,7 +73,7 @@ def render(  # noqa: C901
                 "Vary": "Accept",
                 "X-Inertia": "true",
             },
-            encoder=settings.INERTIA_JSON_ENCODER,
+            encoder=InertiaJsonEncoder,
         )
 
     return base_render(
@@ -81,10 +82,7 @@ def render(  # noqa: C901
         callback=callback,
         context={
             "inertia_layout": settings.INERTIA_LAYOUT,
-            "page": json_encode(
-                page_data(),
-                # TODO: cls=settings.INERTIA_JSON_ENCODER
-            ),
+            "page": json_encode(page_data(), cls=InertiaJsonEncoder),
             **template_data,
         },
     )

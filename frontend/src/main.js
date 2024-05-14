@@ -1,7 +1,8 @@
 import {createInertiaApp} from '@inertiajs/svelte'
 import Layout from '../layout.svelte'
 import axios from "axios";
-// import HomeSvelte from '../../src/adminlte/pages/Home.svelte'
+import { mount } from 'svelte'
+
 
 createInertiaApp({
     resolve: async (name) => {
@@ -12,7 +13,8 @@ createInertiaApp({
         return Object.assign({layout: Layout}, page);
     },
     setup({el, App, props}) {
-        new App({target: el, props})
+        // new App({target: el, props})  // For svelte 4
+        mount(App, { target: el}, props)  // For svelte 5
     },
     progress: {
         // The delay after which the progress bar will appear, in milliseconds...

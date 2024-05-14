@@ -2,6 +2,7 @@
 
 from allauth.account.models import EmailAddress
 from celery import current_app
+from celery import states
 from django.conf import settings
 from django.contrib import admin
 from django.contrib import messages
@@ -10,6 +11,7 @@ from django.db.models import Case
 from django.db.models import Value
 from django.db.models import When
 from django.template.defaultfilters import pluralize
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_celery_beat.admin import PeriodicTaskForm
 from django_celery_beat.models import ClockedSchedule
@@ -268,7 +270,7 @@ class TaskResultAdmin(BaseAdmin):
         "periodic_task_name",
         "task_name",
         "date_done",
-        "status",
+        "status_colored",
         "worker",
     )
     list_filter = ("status", "date_done", "periodic_task_name", "task_name", "worker")
@@ -314,6 +316,27 @@ class TaskResultAdmin(BaseAdmin):
             },
         ),
     )
+
+    @staticmethod
+    def status_colored(obj):
+        """Get colored status."""
+        match obj.status:
+            case states.SUCCESS:
+                color = "green"
+            case states.FAILURE:
+                color = "red"
+            case states.REVOKED:
+                color = "orange"
+            case states.STARTED:
+                color = "blue"
+            case states.RETRY:
+                color = "purple"
+            case states.PENDING:
+                color = "gray"
+            case _:
+                color = "black"
+
+        return mark_safe(f'<span style="color: {color}">{obj.status}</span>')  # noqa: S308
 
     def get_readonly_fields(self, request, obj=None):
         """Get readonly fields."""
