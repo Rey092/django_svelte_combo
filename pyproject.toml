@@ -5,6 +5,7 @@ description = ""
 authors = []
 readme = "README.md"
 packages = []
+package-mode = false
 
 [tool.poetry.dependencies]
 # main
