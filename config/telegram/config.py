@@ -16,9 +16,9 @@ class TelegramConfig:
         environ_name="TELEGRAM_LOGGING_CHAT",
         environ_prefix=None,
     )
-    TELEGRAM_LOGGING_EMIT_ON_DEBUG = values.Value(
+    TELEGRAM_LOGGING_ENABLED = values.Value(
         default=False,
-        environ_name="TELEGRAM_LOGGING_EMIT_ON_DEBUG",
+        environ_name="TELEGRAM_LOGGING_ENABLED",
         environ_prefix=None,
     )
 

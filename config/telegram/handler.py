@@ -6,7 +6,6 @@ from typing import Any
 
 from django.conf import settings
 from django_telegram_logging.handler import TelegramHandler
-from django_telegram_logging.handler import emit_on_debug
 
 from config.telegram.emitter import TelegramEmitter
 
@@ -60,7 +59,7 @@ class CustomTelegramHandler(TelegramHandler):
     def emit(self, record: LogRecord) -> None:
         """Emit a record."""
         # run checks
-        if settings.DEBUG and not emit_on_debug:
+        if not settings.TELEGRAM_LOGGING_ENABLED:
             return
 
         # process record
