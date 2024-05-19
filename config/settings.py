@@ -313,11 +313,14 @@ class Local(CeleryLocalConfig, RequestsTrackerConfig, Base):
 class Dev(TelegramLoggingConfig, Base):
     """Development configuration."""
 
+    # Remove dotenv reading, it's causing issues if no .env file is present
+    DOTENV = None
+
 
 class Prod(TelegramLoggingConfig, Base):
     """Production configuration."""
 
-    # Remove dotenv reading
+    # Remove dotenv reading, it's causing issues if no .env file is present
     DOTENV = None
 
     # HTTP Security checklist: https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
