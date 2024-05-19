@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "node_modules/.bin/vite",
-        "build": "node_modules/.bin/vite build",
+        "build": "node_modules/.bin/vite build && mv dist\\/.vite\\/manifest.json dist\\/manifest.json && rm -rf dist\\/.vite",
         "preview": "node_modules/.bin/vite preview"
     },
     "dependencies": {
