@@ -202,7 +202,8 @@ ignore = [
     "D203", #  `one-blank-line-before-class`
     "D213", #  `multi-line-summary-second-line
     "COM812",
-    "ISC001"
+    "ISC001",
+    "ERA001"
 ]
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
