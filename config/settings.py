@@ -1,5 +1,5 @@
 """Django settings for a project."""
-import os
+
 from pathlib import Path
 
 from configurations import Configuration
@@ -10,6 +10,7 @@ from config.allauth import AllauthConfig
 from config.celery.config import CeleryConfig
 from config.celery.config import CeleryLocalConfig
 from config.celery.schedule import CeleryScheduleConfig
+from config.debug.requests_tracker_config import RequestsTrackerConfig
 from config.svelte.config import InertiaConfig
 from config.telegram.config import TelegramConfig
 from config.telegram.config import TelegramLoggingConfig
@@ -65,7 +66,7 @@ class Base(
 
     # Templates
     TEMPLATES_DIRS = [
-        os.path.join(BASE_DIR, 'templates'),
+        BASE_DIR / "templates",
     ]
     TEMPLATES_APP_DIRS = True
 
@@ -292,47 +293,22 @@ class Base(
         ]
 
 
-# noinspection PyUnreachableCode
-class Local(CeleryLocalConfig, Base):
+class Local(CeleryLocalConfig, RequestsTrackerConfig, Base):
     """Local configuration."""
 
     # Email backend: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
     EMAIL_BACKEND = values.Value("django.core.mail.backends.console.EmailBackend")
 
-    # TODO: uncomment the following lines to enable the debug toolbar if needed else remove them
-    # # django-debug-toolbar: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
-    # THIRD_PARTY_APPS = [*Base.THIRD_PARTY_APPS, "debug_toolbar"]
-    # # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
-    # MIDDLEWARE = [
-    #     *Base.MIDDLEWARE,
-    #     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    # ]
-    # # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
-    # DEBUG_TOOLBAR_CONFIG = {
-    #     "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
-    #     "SHOW_TEMPLATE_CONTEXT": True,
-    # }
-
-    # TODO: change the following lines to enable the requests-tracker if needed else remove them
     # requests-tracker: https://pypi.org/project/requests-tracker/#install-the-package
     THIRD_PARTY_APPS = [
         *Base.THIRD_PARTY_APPS,
-        "requests_tracker"
+        *RequestsTrackerConfig.THIRD_PARTY_APPS,
     ]
+
     MIDDLEWARE = [
-        # *MIDDLEWARE,
         *Base.MIDDLEWARE,
-        "requests_tracker.middleware.requests_tracker_middleware",
+        *RequestsTrackerConfig.MIDDLEWARE,
     ]
-
-    # ips: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-    INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
-    USE_DOCKER = values.BooleanValue(default=False)
-    if USE_DOCKER:
-        import socket
-
-        hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-        INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
 
 class Dev(TelegramLoggingConfig, Base):
