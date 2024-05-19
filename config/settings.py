@@ -41,7 +41,7 @@ class Base(
 
     # Security
     DEBUG = values.BooleanValue(default=True)
-    ALLOWED_HOSTS = values.ListValue(["https://ergo-backend.p3uobx.easypanel.host/"])
+    ALLOWED_HOSTS = values.ListValue(["*"])
 
     # Application definitions
     DJANGO_APPS = [
