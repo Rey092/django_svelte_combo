@@ -62,6 +62,8 @@ class CustomTelegramHandler(TelegramHandler):
         if not settings.TELEGRAM_LOGGING_ENABLED:
             return
 
+        print(settings.TELEGRAM_LOGGING_ENABLED)  # noqa: T201
+
         # process record
         request = self.get_request(record)
         exc_info, message = self.get_exc_info_and_message(record)
@@ -78,7 +80,7 @@ class CustomTelegramHandler(TelegramHandler):
         _, html_message = self.get_reporter_and_html_message(request, exc_info)
 
         # send message
-        self.send_message(message, html_message)
+        # self.send_message(message, html_message)  # noqa: ERA001
 
     @staticmethod
     def check_if_should_send_message(exc_info: Any) -> bool:
