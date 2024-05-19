@@ -9,7 +9,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 # main
-python = "^3.11"
+python = "^3.12"
 aiogram = "^3.6.0"
 # django utils
 django = "^5.0.6"
