@@ -1,5 +1,6 @@
 """Django settings for a project."""
 
+import os
 from pathlib import Path
 
 from configurations import Configuration
@@ -14,6 +15,8 @@ from config.svelte.config import InertiaConfig
 from config.telegram.config import TelegramConfig
 from config.telegram.config import TelegramLoggingConfig
 from config.unfold import UnfoldConfig
+
+print("11111111111111", os.environ.get("TELEGRAM_LOGGING_ENABLED", "None(((("))  # noqa: T201
 
 
 # noinspection PyPep8Naming
