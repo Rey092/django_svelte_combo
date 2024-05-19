@@ -58,7 +58,6 @@ run-dev:
 	gunicorn config.wsgi:application
 
 run-prod:
-	#python manage.py migrate
-	#python manage.py fix_manifest
-	#python manage.py collectstatic --no-input
+	python manage.py collectstatic --no-input
+	python manage.py migrate
 	gunicorn -c gunicorn_conf.py config.wsgi:application
