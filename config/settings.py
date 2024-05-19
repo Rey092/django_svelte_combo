@@ -4,7 +4,6 @@ from pathlib import Path
 
 from configurations import Configuration
 from configurations import values
-from django.utils.translation import gettext_lazy as _
 
 from config.allauth import AllauthConfig
 from config.celery.config import CeleryConfig
@@ -94,7 +93,7 @@ class Base(
     USE_TZ = True
     LANGUAGE_CODE = "en-us"
     LANGUAGES = [
-        ("en", _("English")),
+        ("en", "English"),
     ]
     LOCALE_PATHS = [
         BASE_DIR / "locale",
