@@ -6,7 +6,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from .managers import UserManager
+from src.users.managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
