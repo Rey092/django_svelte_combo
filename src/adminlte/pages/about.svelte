@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="card-body">
-        Start creating your amazing application! {number}, {notNumber}
+        Start creating your amazing application! {number}, {notNumber}!!!
     </div>
     <!-- /.card-body -->
     <div class="card-footer">
