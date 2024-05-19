@@ -58,7 +58,7 @@ run-dev:
 	gunicorn config.wsgi:application
 
 run-prod:
-	python manage.py runserver --configuration=Prod
+	python manage.py runserver --configuration=Local
 	#gunicorn -c gunicorn_conf.py config.wsgi:application
 	#python manage.py migrate
 	#python manage.py fix_manifest
