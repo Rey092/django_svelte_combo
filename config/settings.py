@@ -318,9 +318,6 @@ class Dev(TelegramLoggingConfig, Base):
 class Prod(TelegramLoggingConfig, Base):
     """Production configuration."""
 
-    # Security
-    DEBUG = False
-
     # HTTP Security checklist: https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True
