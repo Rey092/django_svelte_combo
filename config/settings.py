@@ -1,5 +1,5 @@
 """Django settings for a project."""
-
+import os
 from pathlib import Path
 
 from configurations import Configuration
@@ -64,9 +64,10 @@ class Base(
     LOCAL_APPS = ["src.core", "src.users", "src.adminlte"]
 
     # Templates
-    TEMPLATES_DIRS = []
+    TEMPLATES_DIRS = [
+        os.path.join(BASE_DIR, 'templates'),
+    ]
     TEMPLATES_APP_DIRS = True
-    TEMPLATES_DEBUG = True
 
     # Middleware
     MIDDLEWARE = [
@@ -160,7 +161,7 @@ class Base(
     # Static Dirs: https://docs.djangoproject.com/en/dev/ref/settings/#staticfiles-dirs
     STATICFILES_DIRS = [
         BASE_DIR / "static",
-        # *SvelteConfig.SVELTE_STATICFILES_DIRS,
+        *InertiaConfig.INERTIA_STATICFILES_DIRS,
     ]
     # Static Finders: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
     STATICFILES_FINDERS = [
@@ -286,7 +287,6 @@ class Base(
                         "django.template.context_processors.static",
                         "django.contrib.messages.context_processors.messages",
                     ],
-                    "debug": self.TEMPLATES_DEBUG,
                 },
             },
         ]
@@ -299,23 +299,29 @@ class Local(CeleryLocalConfig, Base):
     # Email backend: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
     EMAIL_BACKEND = values.Value("django.core.mail.backends.console.EmailBackend")
 
-    # TODO: check all those debug toolbars
-    # django-debug-toolbar: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
-    THIRD_PARTY_APPS = [*Base.THIRD_PARTY_APPS, "debug_toolbar"]
-    # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
-    MIDDLEWARE = [
-        *Base.MIDDLEWARE,
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
-    ]
-    # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
-    DEBUG_TOOLBAR_CONFIG = {
-        "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
-        "SHOW_TEMPLATE_CONTEXT": True,
-    }
+    # TODO: uncomment the following lines to enable the debug toolbar if needed else remove them
+    # # django-debug-toolbar: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
+    # THIRD_PARTY_APPS = [*Base.THIRD_PARTY_APPS, "debug_toolbar"]
+    # # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
+    # MIDDLEWARE = [
+    #     *Base.MIDDLEWARE,
+    #     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # ]
+    # # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
+    # DEBUG_TOOLBAR_CONFIG = {
+    #     "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
+    #     "SHOW_TEMPLATE_CONTEXT": True,
+    # }
+
+    # TODO: change the following lines to enable the requests-tracker if needed else remove them
     # requests-tracker: https://pypi.org/project/requests-tracker/#install-the-package
-    THIRD_PARTY_APPS = [*THIRD_PARTY_APPS, "requests_tracker"]
+    THIRD_PARTY_APPS = [
+        *Base.THIRD_PARTY_APPS,
+        "requests_tracker"
+    ]
     MIDDLEWARE = [
-        *MIDDLEWARE,
+        # *MIDDLEWARE,
+        *Base.MIDDLEWARE,
         "requests_tracker.middleware.requests_tracker_middleware",
     ]
 
@@ -368,9 +374,6 @@ class Test(Base):
 
     # Email: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
     EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
-
-    # Templates
-    TEMPLATES_DEBUG = True
 
     # Media test: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
     MEDIA_URL = "http://media.testserver"

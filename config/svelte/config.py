@@ -28,13 +28,15 @@ class InertiaConfig:
     ]
 
     # dirs
-    INERTIA_STATICFILES_DIRS = [BASE_DIR / "dist"]
+    INERTIA_STATICFILES_DIRS = [
+        BASE_DIR / "dist",
+    ]
 
     # Django Vite server port for local development.
     DJANGO_VITE_DEV_SERVER_PORT = values.IntegerValue(3000, environ_prefix=None)
 
     # Inertia: https://github.com/inertiajs/inertia-django
-    INERTIA_LAYOUT = "inertia.html"
+    INERTIA_LAYOUT = "svelte.html"
     INERTIA_SSR_ENABLED = False
     INERTIA_VERSION = "1.0.0"
     INERTIA_JSON_ENCODER = InertiaJsonEncoder

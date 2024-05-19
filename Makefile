@@ -4,13 +4,19 @@ run:
 	python manage.py runserver
 
 svelte:
-	cd frontend && npm install --force
-	cd frontend && npm run dev
+	nvm use --lts
+	npm install --force
+	npm run dev
 
 init:
 	python manage.py migrate
 	python manage.py init_project
+	nvm use --lts
+	npm install --force
 	python manage.py runserver
+
+shell:
+	python manage.py shell_plus
 
 
 # DATABASE

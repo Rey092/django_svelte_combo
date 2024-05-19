@@ -1,0 +1,17 @@
+"""AdminLTE views."""
+
+import random
+
+from config.svelte.view import InertiaView
+
+
+class AboutPageInertiaView(InertiaView):
+    """About page view."""
+
+    component = "adminlte:about"
+
+    def get_context_data(self, **kwargs):
+        """Get context data."""
+        return {
+            "number": random.randint(1, 100),  # noqa: S311
+        }
