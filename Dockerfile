@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:python3.12-nodejs20
+FROM nikolaik/python-nodejs:python3.11-nodejs20
 
 # set environment variables
 ENV PYTHONFAULTHANDLER=1 \
