@@ -40,8 +40,8 @@ class Base(
     API_KEY = values.Value("91011")
 
     # Security
-    DEBUG = values.BooleanValue(default=True)
     ALLOWED_HOSTS = values.ListValue(["*"])
+    DEBUG = values.BooleanValue(default=True)
 
     # Application definitions
     DJANGO_APPS = [
