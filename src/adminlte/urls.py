@@ -7,5 +7,5 @@ from src.adminlte.pages.home import HomePageInertiaView
 
 urlpatterns = [
     path("", HomePageInertiaView.as_view(), name="home"),
-    path("about/", AboutPageInertiaView.as_view(), name="home"),
+    path("about/", AboutPageInertiaView.as_view(), name="about"),
 ]

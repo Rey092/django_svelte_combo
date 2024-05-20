@@ -177,6 +177,7 @@ class InertiaMiddleware:
             response, HttpResponseRedirect
         )
 
+    @staticmethod
     def force_refresh(self, request):
         """Force a refresh of the page."""
         messages.get_messages(request).used = False

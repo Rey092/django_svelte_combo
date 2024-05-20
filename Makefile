@@ -4,7 +4,6 @@ run:
 	python manage.py runserver
 
 svelte:
-	nvm use --lts
 	npm install --force
 	npm run dev
 

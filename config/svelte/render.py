@@ -20,7 +20,6 @@ def render(  # noqa: C901
     template_data: dict | None = None,
 ):
     """Render an Inertia page."""
-    # TODO: simplify method
     props = props or {}
     template_data = template_data or {}
 
